@@ -1,0 +1,103 @@
+<html>
+<script src="rando.js">
+</script>
+<style>
+     
+    table.reduce {
+        border-collapse: collapse; 
+        border:1px solid #69899F;
+    } 
+    table.reduce td{
+        border:1px dotted #000000;
+        padding:1px;
+        margin:1px;
+        font-size:0.5em;
+    }
+    table.reduce td:first-child{
+        border-left:0px solid #000000;
+        font-size:0.5em;
+    }
+    table.reduce th{
+       border:2px solid #69899F;
+       padding:5px;
+        font-size:0.5em;
+    } 
+
+</style>
+
+<script>
+function doTblCreate(){
+for(let k in data){
+    if (!data.hasOwnProperty(k)) { continue; }
+    let entry = data[ k ];
+
+    var pane = document.getElementById("pane");
+    var row1 = pane.insertRow(-1);
+    var cell1 = row1.insertCell(0);
+    var cell2 = row1.insertCell(1);
+    var hor_tbl = document.createElement("table");
+    hor_tbl.classList.add("reduce");
+    
+    for(let i = 0; i < entry.top_reduce.max_len; ++i){//build row placeholder
+        var reduce_row = hor_tbl.insertRow(-1);
+        var reduce = entry.top_reduce.reduce;
+        for(var k_arr in reduce){
+            if (!reduce.hasOwnProperty(k_arr)) { continue; }
+            let arr = reduce[k_arr];
+            var cell1 = reduce_row.insertCell(-1);
+            let in_a_idx = i - (entry.top_reduce.max_len - arr.length);
+            if( (in_a_idx) >= 0 ){
+                cell1.innerHTML = ""+arr[in_a_idx];
+            }
+
+        }
+    }
+    cell2.appendChild( hor_tbl );
+    
+
+    var row2 = pane.insertRow(-1);
+    cell1 = row2.insertCell(0);
+    var ver_tbl = document.createElement("table");
+    ver_tbl.classList.add("reduce");
+
+    var reduce = entry.left_reduce.reduce;
+    for(var k_arr in reduce){
+        var reduce_row = ver_tbl.insertRow(-1);
+        let arr = reduce[k_arr];
+        for(let i = 0; i < entry.left_reduce.max_len; ++i){
+            var dataCell = reduce_row.insertCell(-1);
+            let in_a_idx = i - (entry.left_reduce.max_len - arr.length);
+            if( (in_a_idx) >= 0 ){
+                dataCell.innerHTML = ""+arr[in_a_idx];
+            }
+        }
+    }
+    cell1.appendChild( ver_tbl );
+
+    cell2 = row2.insertCell(1);
+    var img = document.createElement("img");
+    img.src=entry.image;
+    cell2.appendChild(img);
+}
+}
+function toggleReduce()
+{
+    var allItms = document.getElementsByClassName("reduce");
+    for(let k in allItms)
+    {
+        allItms[k].style.display= allItms[k].style.display === "none" ? "block" : "none";
+    }
+}
+
+</script>
+
+<body onload="doTblCreate()">
+    <div>
+        <input type="checkbox" checked onclick="toggleReduce()"/>
+        <span> Show reduce </span>
+    </div>
+    <table id="pane">
+
+    </table>
+</body>
+</html>
