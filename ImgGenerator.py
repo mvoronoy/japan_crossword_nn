@@ -41,7 +41,8 @@ class RandomImageOp:
                 row_sum += 1
             last_colour = pix
         if normalize:
-            triggers = [x / row_sum for x in triggers]
+            row_max = max(triggers, default=1)
+            triggers = [x / row_max for x in triggers]
         return triggers
 
     def top_reduce(self, normalize=False):
@@ -218,7 +219,7 @@ def produce_numpy_sample(w=W, h=H):
             left_d = img.left_reduce(True)
             yield (make_numpy_arr(top_d, False),
                    make_numpy_arr(left_d, True),
-                   numpy.asarray(img.image).astype('float32') / 255.)
+                   numpy.asarray(img.image).astype('float32') )
 
 
 def gen_numpy_2chanel_sample(w=W, h=H):
